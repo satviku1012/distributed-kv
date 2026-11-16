@@ -31,7 +31,7 @@ cmake .. && make -j
 
 ## Status
 
-- [ ] wire protocol and socket helpers
+- [x] wire protocol and socket helpers
 - [ ] consistent hash ring
 - [ ] sharded store with binary WAL and crash recovery
 - [ ] node server
