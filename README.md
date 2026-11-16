@@ -33,7 +33,7 @@ cmake .. && make -j
 
 - [x] wire protocol and socket helpers
 - [x] consistent hash ring
-- [ ] sharded store with binary WAL and crash recovery
+- [x] sharded store with binary WAL and crash recovery
 - [ ] node server
 - [ ] cluster client with replica failover
 - [ ] benchmark and end-to-end cluster test
