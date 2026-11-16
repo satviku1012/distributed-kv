@@ -29,6 +29,23 @@ mkdir -p build && cd build
 cmake .. && make -j
 ```
 
+## Running
+
+```sh
+# start a 3-node cluster
+./build/node_server 8001 wal1.log &
+./build/node_server 8002 wal2.log &
+./build/node_server 8003 wal3.log &
+
+# benchmark it
+./build/benchmark --mode=throughput --nodes=127.0.0.1:8001,127.0.0.1:8002,127.0.0.1:8003 \
+    --threads=16 --ops=100000
+```
+
+`scripts/run_cluster_test.sh` builds everything and runs the full suite: single-lock vs
+16-shard contention, a 3-node benchmark, `kill -9` failover with replicated reads, and WAL
+recovery after restarting the killed node.
+
 ## Status
 
 - [x] wire protocol and socket helpers
@@ -36,4 +53,4 @@ cmake .. && make -j
 - [x] sharded store with binary WAL and crash recovery
 - [x] node server
 - [x] cluster client with replica failover
-- [ ] benchmark and end-to-end cluster test
+- [x] benchmark and end-to-end cluster test
