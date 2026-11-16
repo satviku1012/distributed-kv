@@ -35,5 +35,5 @@ cmake .. && make -j
 - [x] consistent hash ring
 - [x] sharded store with binary WAL and crash recovery
 - [x] node server
-- [ ] cluster client with replica failover
+- [x] cluster client with replica failover
 - [ ] benchmark and end-to-end cluster test
