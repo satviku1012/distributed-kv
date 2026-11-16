@@ -1,4 +1,4 @@
-# simple-distributed-kv
+# distributed-kv
 
 A lightweight, crash-resilient, sharded distributed key-value store written in C++20
 with zero third-party dependencies (C++ standard library + POSIX sockets/file I/O only).
