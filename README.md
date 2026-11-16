@@ -32,7 +32,7 @@ cmake .. && make -j
 ## Status
 
 - [x] wire protocol and socket helpers
-- [ ] consistent hash ring
+- [x] consistent hash ring
 - [ ] sharded store with binary WAL and crash recovery
 - [ ] node server
 - [ ] cluster client with replica failover
