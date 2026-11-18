@@ -188,17 +188,18 @@ private:
         const auto key_len = static_cast<uint32_t>(key.size());
         const auto val_len = static_cast<uint32_t>(val.size());
 
+        // Built with append rather than memcpy into a pre-sized buffer: GCC 15
+        // misreads the size math after inlining and raises a false -Warray-bounds.
         std::string frame;
-        frame.resize(kWalHeaderSize + key.size() + val.size());
-        char* p = frame.data();
-        const auto op_byte = static_cast<uint8_t>(op);
-        std::memcpy(p + 4, &op_byte, 1);
-        std::memcpy(p + 5, &key_len, 4);
-        std::memcpy(p + 9, &val_len, 4);
-        std::memcpy(p + kWalHeaderSize, key.data(), key.size());
-        std::memcpy(p + kWalHeaderSize + key.size(), val.data(), val.size());
-        const uint32_t checksum = fnv1a_hash(std::string_view(p + 4, frame.size() - 4));
-        std::memcpy(p, &checksum, 4);
+        frame.reserve(kWalHeaderSize + key.size() + val.size());
+        frame.append(4, '\0');  // checksum, filled in below
+        frame.push_back(static_cast<char>(op));
+        frame.append(reinterpret_cast<const char*>(&key_len), 4);
+        frame.append(reinterpret_cast<const char*>(&val_len), 4);
+        frame.append(key);
+        frame.append(val);
+        const uint32_t checksum = fnv1a_hash(std::string_view(frame).substr(4));
+        std::memcpy(frame.data(), &checksum, 4);
 
         std::lock_guard lk(wal_mtx_);
         size_t written = 0;
